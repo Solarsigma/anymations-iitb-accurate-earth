@@ -78,6 +78,7 @@ if __name__ == "__main__":
 	parser.add_argument("--time", "-t", nargs=1, type=makeTimeArr, default=[['00','00']], help="Time to be inputted in the format 'HH:MM'", dest="time")
 	parser.add_argument("--date", "-d", nargs=1, type=makeDateArr, default=[['2021','07','26']], help="Date to be inputted in the format YYYY-MM-DD", dest="date")
 	parser.add_argument("--save", "-s", action='store_true', default=False, help="If you want the .blend (Blender) file saved or not.", dest="save")
+	parser.add_argument("--animate", "-a", action='store_true', default=False, help="If you want default simple animation", dest="animate")
 	args = parser.parse_args(argv)
 	time = timedelta(hours=int(args.time[0][0]), minutes=int(args.time[0][1]))
 	date = datetime(year=int(args.date[0][0]), month=int(args.date[0][1]), day=int(args.date[0][2]))
@@ -87,5 +88,7 @@ if __name__ == "__main__":
 
 	clean_slate()
 
+	if args.animate:
+		animate.animateCamera()
 	if args.save:
 		bpy.ops.wm.save_as_mainfile(filepath="./realistic_earth.blend")
