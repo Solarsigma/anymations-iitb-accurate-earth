@@ -94,6 +94,7 @@ def makeTerrainOcean():
     #bump
     bump_tex = earth_nodes.new(type = 'ShaderNodeTexImage')
     bump = earth_nodes.new(type = 'ShaderNodeBump')
+    bump.invert = True
 
 
     #adding image to image texture nodes
@@ -176,7 +177,7 @@ def makeTerrainOcean():
     link10 = earth_links.new(fresnel.outputs[0], refraction.inputs[2])
     #glossy and refarction to mix shader
     link11 = earth_links.new(glossy.outputs[0], mix_shader_1.inputs[1])
-    link12 = earth_links.new(refraction.outputs[0], mix_shader_2.inputs[1])
+    link12 = earth_links.new(refraction.outputs[0], mix_shader_1.inputs[2])
     #fresnel and mixshader_1 to mixshader_2
     link13 = earth_links.new(fresnel.outputs[0], mix_shader_2.inputs[0])
     link14 = earth_links.new(mix_shader_1.outputs[0], mix_shader_2.inputs[2])
@@ -194,11 +195,11 @@ def makeTerrainOcean():
     link22 = earth_links.new(bump.outputs[0], diff.inputs[2])
     #optional:
     #noise to mix rgb
-    #link23 = earth_links.new(noise_tex.outputs[1], mix_rgb.inputs[1])
+    link23 = earth_links.new(noise_tex.outputs[1], mix_rgb.inputs[1])
     #voronoi tex to invert
-    #link24 = earth_links.new(voronoi_tex.outputs[1], invert_2.inputs[1])
+    link24 = earth_links.new(voronoi_tex.outputs[1], invert_2.inputs[1])
     #invert to mix rgb
-    #link25 = earth_links.new(invert_2.outputs[0], mix_rgb.inputs[2])
+    link25 = earth_links.new(invert_2.outputs[0], mix_rgb.inputs[2])
     #mix rgb to material output
-    #link26 = earth_links.new(mix_rgb.outputs[0], material_output.inputs[2])
+    link26 = earth_links.new(mix_rgb.outputs[0], material_output.inputs[2])
     return earth
