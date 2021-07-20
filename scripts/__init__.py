@@ -1,7 +1,9 @@
 # init script for importing all scripts
 # from . import atmosphere
 from . import lighting
-from . import terrain_ocean
+from . import earth
 from . import atmosphere
+from . import animate
+from . import clouds
 
 print('Scripts imported')
