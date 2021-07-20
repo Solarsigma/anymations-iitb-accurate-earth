@@ -19,10 +19,10 @@ def _getSunCoors(time):
     return sunRelCoor
 
 
-def makeSun(toTrack, datetime, radius=BLEND_RAD_SUN, power=10):
+def makeSun(toTrack, datetime, power=10):
     sunLight = bpy.data.lights.new(name='SunLight', type='SUN')
     sun = bpy.data.objects.new(name='Sun', object_data=sunLight)
-    bpy.context.scene.objects.link(sun)
+    bpy.context.collection.objects.link(sun)
     sunLight.type = 'SUN'
     sunLight.energy = power
     sunConstraint = sun.constraints.new(type='DAMPED_TRACK')
