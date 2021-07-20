@@ -88,6 +88,10 @@ if __name__ == "__main__":
 
 	clean_slate()
 
+	earth = earth.makeTerrainOcean()
+	earth_atmo = atmosphere.makeAtmosphere(earth)
+	sun = lighting.makeSun(toTrack=earth, datetime=finalTime)
+	clouds = clouds.makeClouds(args.animate)
 	if args.animate:
 		animate.animateCamera()
 	if args.save:
