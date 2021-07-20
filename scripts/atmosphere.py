@@ -1,4 +1,6 @@
 import bpy
+## Uses 'input object' radius
+## Uses 32/30 as ratio between atmo rad and earth rad
 
 def makeAtmosphere(earth):
     '''
@@ -268,7 +270,7 @@ def makeAtmosphere(earth):
     VS_addShader2 = volume_shader_node_group.nodes.new('ShaderNodeAddShader')
 
     VS_addShader3 = volume_shader_node_group.nodes.new('ShaderNodeAddShader')
-    
+
     VS_addShader4 = volume_shader_node_group.nodes.new('ShaderNodeAddShader')
 
     VS_transparentBsdf = volume_shader_node_group.nodes.new('ShaderNodeBsdfTransparent')
@@ -424,7 +426,7 @@ def makeAtmosphere(earth):
     ##### Creating the actual material #####
 
     atmo_mat = bpy.data.materials.new(name="Earth_Atmo")
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=32*earth.dimensions[0]/30, enter_editmode=False, align='WORLD', location=earth.location)
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=(32/30)*earth.dimensions[0]/2, enter_editmode=False, align='WORLD', location=earth.location)
     earth_atmo = bpy.context.active_object
     earth_atmo.parent = earth
     earth_atmo.data.materials.append(atmo_mat)
@@ -441,6 +443,6 @@ def makeAtmosphere(earth):
     ## Linking 'Spheric Atmospheric Barometric' Node Group to Material Output
     atmo_links = atmo_mat.node_tree.links
     atmo_links.new(spheric_atmo_baro_groupNode.outputs[0], material_output.inputs[1])
-    
-    
+
+
     return earth_atmo
