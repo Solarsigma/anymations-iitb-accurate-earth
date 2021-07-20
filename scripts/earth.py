@@ -1,16 +1,18 @@
 import bpy
 import os
 
-def make_terrain_ocean():
-    
+## Earth of radius 1
+
+def makeTerrainOcean():
+
 
     #creating UV Sphere
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=1, enter_editmode=False, align='WORLD', location=(0, 0, 0), scale=(1, 1, 1))
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=1, enter_editmode=False, align='WORLD', location=(0, 0, 0))
 
     #referencing object as earth
     earth=bpy.context.active_object
 
-    bpy.ops.transform.resize(value=(10, 10, 10), orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
+    # bpy.ops.transform.resize(value=(10, 10, 10), orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
 
 
     #Creating modifier
@@ -48,7 +50,7 @@ def make_terrain_ocean():
     #image texture for base earth texture
     base_tex = earth_nodes.new(type = 'ShaderNodeTexImage')
 
-    #Glossy node 
+    #Glossy node
     glossy = earth_nodes.new(type = 'ShaderNodeBsdfGlossy')
 
     #mix shader
@@ -90,20 +92,20 @@ def make_terrain_ocean():
     mix_rgb = earth_nodes.new(type = 'ShaderNodeMixRGB')
 
     #bump
-    bump_tex = earth_nodes.new(type = 'ShaderNodeTexImage') 
+    bump_tex = earth_nodes.new(type = 'ShaderNodeTexImage')
     bump = earth_nodes.new(type = 'ShaderNodeBump')
 
 
     #adding image to image texture nodes
 
     #Albedo image
-    earth_img = bpy.data.images.load(os.path.join(".", os.path.normpath(r"./Textures/earth/Albedo.jpg")))
+    earth_img = bpy.data.images.load(os.path.join(".", os.path.normpath(r"../textures/albedo.jpg")))
     base_tex.image = earth_img
     #bump texture
-    bump_img = bpy.data.images.load(os.path.join(".", os.path.normpath(r"./Textures/earth/Bump.jpg")))
+    bump_img = bpy.data.images.load(os.path.join(".", os.path.normpath(r"../textures/bump.jpg")))
     bump_tex.image = bump_img
     #ocean mask image
-    ocean_mask_img = bpy.data.images.load(os.path.join(".", os.path.normpath(r"./Textures/earth/Ocean_Mask.png")))
+    ocean_mask_img = bpy.data.images.load(os.path.join(".", os.path.normpath(r"../textures/ocean_mask.png")))
     ocean_mask_tex.image = ocean_mask_img
 
     #changing value of img texture nodes
@@ -119,9 +121,9 @@ def make_terrain_ocean():
     bump.inputs[0].default_value = 3
     bump.inputs[1].default_value = 2
     #changing color space to non color
-    bpy.data.images["Ocean_Mask.png"].colorspace_settings.name = 'Non-Color'
-    bpy.data.images["Albedo.jpg"].colorspace_settings.name = 'Non-Color'
-    bpy.data.images["Bump.jpg"].colorspace_settings.name = 'Non-Color'
+    bpy.data.images["ocean_mask.png"].colorspace_settings.name = 'Non-Color'
+    bpy.data.images["albedo.jpg"].colorspace_settings.name = 'Non-Color'
+    bpy.data.images["bump.jpg"].colorspace_settings.name = 'Non-Color'
 
     #changing values of glossy node parameters
     glossy.inputs[1].default_value = 0.48
@@ -186,7 +188,7 @@ def make_terrain_ocean():
     link18 = earth_links.new(mix_shader_2.outputs[0], mix_shader_3.inputs[2])
     #mix shader 3 to material output
     link19 = earth_links.new(mix_shader_3.outputs[0], material_output.inputs[0])
-    #links to bump 
+    #links to bump
     link20 = earth_links.new(tex_coord.outputs[0], bump_tex.inputs[0])
     link21 = earth_links.new(bump_tex.outputs[0], bump.inputs[2])
     link22 = earth_links.new(bump.outputs[0], diff.inputs[2])
