@@ -12,6 +12,7 @@ def makeClouds(animBool):
     bpy.ops.mesh.subdivide(number_cuts=10)
     bpy.ops.transform.tosphere(value=1, mirror=True)
     bpy.ops.object.editmode_toggle()
+    bpy.data.objects["Cube"].scale=[0.986502,0.986502,0.998748]
     bpy.ops.object.subdivision_set(level=2, relative=False)
     bpy.ops.object.shade_smooth()
 
