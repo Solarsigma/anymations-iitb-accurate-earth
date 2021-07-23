@@ -3,13 +3,13 @@ import bpy
 
 
 CAMSPEED=1
-DISTANCE=6
-## Assuming earth radius 1
+## Assuming earth radius earthRad
 #bpy.ops.mesh.primitive_uv_sphere_add(enter_editmode=False, align='WORLD', location=(0, 0, 0), scale=(1, 1, 1))
 
 
-def animateCamera():
-    bpy.ops.object.empty_add(type='PLAIN_AXES', align='WORLD', location=(1, 1, .1))
+def animateCamera(earthRad = 1):
+    DISTANCE=6*earthRad
+    bpy.ops.object.empty_add(type='PLAIN_AXES', align='WORLD', location=([1, 1, 0.1]*earthRad))
     bpy.ops.object.empty_add(type='PLAIN_AXES', align='WORLD', location=(0, 0, 0))
     obj=bpy.data.objects
     bpy.ops.object.camera_add(enter_editmode=False, align='VIEW', location=(0, 0, 0), rotation=(1.5708,0,0))

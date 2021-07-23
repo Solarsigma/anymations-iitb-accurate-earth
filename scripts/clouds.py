@@ -5,15 +5,15 @@ import bpy
 
 CLOUDSPEED=1
 
-def makeClouds(animBool):
-    bpy.ops.mesh.primitive_cube_add(size=2*2/(2.54), location=(0, 0, 0))
+def makeClouds(animBool, earthRad = 1):
+    bpy.ops.mesh.primitive_cube_add(size=2*2*earthRad/(2.54), location=(0, 0, 0))
     cloudSphere=bpy.context.active_object
     bpy.ops.object.editmode_toggle()
     bpy.ops.mesh.subdivide(number_cuts=10)
     bpy.ops.transform.tosphere(value=1, mirror=True)
     bpy.ops.object.editmode_toggle()
     bpy.data.objects["Cube"].scale=[0.986502,0.986502,0.998748]
-    bpy.ops.object.subdivision_set(level=2, relative=False)
+    bpy.ops.object.subdivision_set(level=4, relative=False)
     bpy.ops.object.shade_smooth()
 
 

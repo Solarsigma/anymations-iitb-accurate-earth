@@ -428,6 +428,10 @@ def makeAtmosphere(earth):
     atmo_mat = bpy.data.materials.new(name="Earth_Atmo")
     bpy.ops.mesh.primitive_uv_sphere_add(radius=(32/30)*earth.dimensions[0]/2, enter_editmode=False, align='WORLD', location=earth.location)
     earth_atmo = bpy.context.active_object
+    for face in bpy.context.active_object.data.polygons:
+        face.use_smooth = True
+    earth_atmo.modifiers.new("My Modifier",'SUBSURF')
+    earth_atmo.modifiers.get("My Modifier").render_levels = 6
     earth_atmo.parent = earth
     earth_atmo.data.materials.append(atmo_mat)
     atmo_mat.use_nodes = True

@@ -1,13 +1,13 @@
 import bpy
 import os
 
-## Earth of radius 1
+## Earth of radius earthRad
 
-def makeTerrainOcean():
+def makeTerrainOcean(earthRad=1):
 
 
     #creating UV Sphere
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=1, enter_editmode=False, align='WORLD', location=(0, 0, 0))
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=earthRad, enter_editmode=False, align='WORLD', location=(0, 0, 0))
 
     #referencing object as earth
     earth=bpy.context.active_object
@@ -17,6 +17,7 @@ def makeTerrainOcean():
 
     #Creating modifier
     earth.modifiers.new("My Modifier",'SUBSURF')
+    earth.modifiers.get("My Modifier").render_levels = 4
     bpy.ops.object.shade_smooth()
 
 
@@ -45,7 +46,6 @@ def makeTerrainOcean():
 
     #invert
     invert_1 = earth_nodes.new(type = 'ShaderNodeInvert')
-    invert_2 = earth_nodes.new(type = 'ShaderNodeInvert')
 
     #image texture for base earth texture
     base_tex = earth_nodes.new(type = 'ShaderNodeTexImage')
@@ -85,16 +85,13 @@ def makeTerrainOcean():
     #noise texture node
     noise_tex = earth_nodes.new(type= 'ShaderNodeTexNoise')
 
-    #voronoi texture node
-    voronoi_tex = earth_nodes.new(type= 'ShaderNodeTexVoronoi')
-
     #mix rgb
     mix_rgb = earth_nodes.new(type = 'ShaderNodeMixRGB')
 
     #bump
     bump_tex = earth_nodes.new(type = 'ShaderNodeTexImage')
     bump = earth_nodes.new(type = 'ShaderNodeBump')
-    bump.invert = True
+    bump.invert = False
 
 
     #adding image to image texture nodes
@@ -132,7 +129,6 @@ def makeTerrainOcean():
     fresnel.inputs[0].default_value = 1.33
     #invert node fac value
     invert_1.inputs[0].default_value = 1
-    invert_2.inputs[0].default_value = 1
     #changing value of math nodes
     subtract.inputs[1].default_value = 0.3
     multiply.inputs[0].default_value = 0.25
@@ -145,13 +141,10 @@ def makeTerrainOcean():
     mix_shader_1.inputs[0].default_value = 0.2
     mix_shader_2.inputs[0].default_value = 0.75
     mix_shader_2.inputs[0].default_value = 0.625
-    #noise and voronoi tex values
+    #noise tex values
     noise_tex.inputs[2].default_value = 50
     noise_tex.inputs[3].default_value = 100
     noise_tex.inputs[4].default_value = 1
-
-    voronoi_tex.inputs[1].default_value = 0.5
-    voronoi_tex.inputs[2].default_value = 0.5
 
     #mix rgb value
     mix_rgb.inputs[0].default_value = 0.999
@@ -196,10 +189,6 @@ def makeTerrainOcean():
     #optional:
     #noise to mix rgb
     link23 = earth_links.new(noise_tex.outputs[1], mix_rgb.inputs[1])
-    #voronoi tex to invert
-    link24 = earth_links.new(voronoi_tex.outputs[1], invert_2.inputs[1])
-    #invert to mix rgb
-    link25 = earth_links.new(invert_2.outputs[0], mix_rgb.inputs[2])
     #mix rgb to material output
     link26 = earth_links.new(mix_rgb.outputs[0], material_output.inputs[2])
     return earth
