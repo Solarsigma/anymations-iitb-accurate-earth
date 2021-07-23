@@ -87,11 +87,11 @@ if __name__ == "__main__":
 	print(finalTime)
 
 	clean_slate()
-
 	earth = earth.makeTerrainOcean()
 	earth_atmo = atmosphere.makeAtmosphere(earth)
 	sun = lighting.makeSun(toTrack=earth, datetime=finalTime)
 	clouds = clouds.makeClouds(args.animate)
+	bpy.context.scene.world.color = (0,0,0)
 	if args.animate:
 		animate.animateCamera()
 	if args.save:
