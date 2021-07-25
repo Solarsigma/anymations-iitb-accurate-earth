@@ -17,6 +17,7 @@ def animateCamera(earthRad=1):
     bpy.ops.object.constraint_add(type='TRACK_TO')
     bpy.context.object.constraints["Track To"].target = obj["Empty"]
     bpy.context.object.constraints["Track To"].track_axis = 'TRACK_NEGATIVE_Z'
+    bpy.context.object.constraints["Track To"].up_axis = 'UP_Y'
     obj["Empty"].parent=obj["Empty.001"]
     obj["Camera"].parent=obj["Empty"]
     obj["Camera"].location=obj["Camera"].location-obj["Empty"].location
