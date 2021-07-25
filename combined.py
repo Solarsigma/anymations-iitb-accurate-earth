@@ -1,8 +1,12 @@
 ## TODO
-# Modify earth using all functions to make a full model
-#	# Add camera
-#	# Add clouds, weather
+# 1. fix command line run errors.
+# 5. render image from cmd line
 # Render an image/animation instead of just saving the blend file
+
+RAD_EARTH = 6_371 # km
+DIST_ES = 149_600_000 # km
+SCALE_FAC = 1000 # scaled m per blender m
+SCALED_DIST_ES = DIST_ES/(RAD_EARTH*SCALE_FAC)
 
 ## Init script
 import os
@@ -79,6 +83,8 @@ if __name__ == "__main__":
 	parser.add_argument("--date", "-d", nargs=1, type=makeDateArr, default=[['2021','07','26']], help="Date to be inputted in the format YYYY-MM-DD", dest="date")
 	parser.add_argument("--save", "-s", action='store_true', default=False, help="If you want the .blend (Blender) file saved or not.", dest="save")
 	parser.add_argument("--animate", "-a", action='store_true', default=False, help="If you want default simple animation", dest="animate")
+	parser.add_argument("--latitude", "-lat", type=float, default=19.0760, help="Enter the latitude in degrees (North is positive. It should be a decimal value)" dest="latitude")
+	parser.add_argument("--longitude", "-lon", type=float, default=72.8777, help="Enter the longitude in degrees (East is positive. It should be a decimal value)", dest="longitude")
 	args = parser.parse_args(argv)
 	time = timedelta(hours=int(args.time[0][0]), minutes=int(args.time[0][1]))
 	date = datetime(year=int(args.date[0][0]), month=int(args.date[0][1]), day=int(args.date[0][2]))
@@ -94,5 +100,7 @@ if __name__ == "__main__":
 	bpy.context.scene.world.color = (0,0,0)
 	if args.animate:
 		animate.animateCamera()
+	else:
+		animate.makeStillCamera(camLocation=helper.get_cartesian(latitude=args.latitude, longitude=args.longitude, height=animate.getDistance(), scale=RAD_EARTH*SCALE_FAC))
 	if args.save:
 		bpy.ops.wm.save_as_mainfile(filepath="./realistic_earth.blend")
