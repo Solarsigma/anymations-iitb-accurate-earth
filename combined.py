@@ -97,7 +97,9 @@ if __name__ == "__main__":
 	earth_atmo = atmosphere.makeAtmosphere(earth)
 	sun = lighting.makeSun(toTrack=earth, datetime=finalTime)
 	clouds = clouds.makeClouds(args.animate)
-	bpy.context.scene.world.color = (0,0,0)
+	bpy.context.scene.render.engine = 'CYCLES'
+	bpy.data.worlds["World"].node_tree.nodes["Background"].inputs[0].default_value = (0, 0, 0, 1)
+	bpy.context.scene.use_denoising = True
 	if args.animate:
 		animate.animateCamera()
 	else:
