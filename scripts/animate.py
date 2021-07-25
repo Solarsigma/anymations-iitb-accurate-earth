@@ -8,7 +8,7 @@ CAMSPEED=1
 
 
 def animateCamera(earthRad = 1):
-    DISTANCE=6*earthRad
+    DISTANCE=2*earthRad
     bpy.ops.object.empty_add(type='PLAIN_AXES', align='WORLD', location=([1, 1, 0.1]*earthRad))
     bpy.ops.object.empty_add(type='PLAIN_AXES', align='WORLD', location=(0, 0, 0))
     obj=bpy.data.objects
