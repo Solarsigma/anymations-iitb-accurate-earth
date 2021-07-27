@@ -102,13 +102,13 @@ def makeTerrainOcean(earthRad=1, imgDir=dir):
     #adding image to image texture nodes
 
     #Albedo image
-    earth_img = bpy.data.images.load(os.path.join(imgDir, os.path.normpath(r"textures/albedo.jpg")))
+    earth_img = bpy.data.images.load(os.path.normpath(r"textures/albedo.jpg"))
     base_tex.image = earth_img
     #bump texture
-    bump_img = bpy.data.images.load(os.path.join(imgDir, os.path.normpath(r"textures/bump.jpg")))
+    bump_img = bpy.data.images.load(os.path.normpath(r"textures/bump.jpg"))
     bump_tex.image = bump_img
     #ocean mask image
-    ocean_mask_img = bpy.data.images.load(os.path.join(imgDir, os.path.normpath(r"textures/ocean_mask.png")))
+    ocean_mask_img = bpy.data.images.load(os.path.normpath(r"textures/ocean_mask.png"))
     ocean_mask_tex.image = ocean_mask_img
 
     #changing value of img texture nodes
