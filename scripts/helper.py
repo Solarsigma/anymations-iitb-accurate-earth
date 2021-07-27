@@ -10,7 +10,7 @@ import numpy as np
 #(lat, lon) notation
 
 
-def get_cartesian(latitude, longitude, scale=1):
+def get_cartesian(latitude, longitude, height, scale=1):
   lat, lon= np.deg2rad(latitude), np.deg2rad(longitude)
   R=6371500/scale
   x=(R+height)*np.cos(lat)*np.cos(lon)
