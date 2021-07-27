@@ -1,9 +1,14 @@
 import bpy
 import os
+import sys
 
 ## Earth of radius earthRad
 
-def makeTerrainOcean(earthRad=1):
+dir = os.path.dirname(bpy.data.filepath)
+if not dir or dir != "":
+    dir = os.path.dirname(__file__)
+
+def makeTerrainOcean(earthRad=1, imgDir=dir):
 
 
     #creating UV Sphere
@@ -97,13 +102,13 @@ def makeTerrainOcean(earthRad=1):
     #adding image to image texture nodes
 
     #Albedo image
-    earth_img = bpy.data.images.load(os.path.join(".", os.path.normpath(r"../textures/albedo.jpg")))
+    earth_img = bpy.data.images.load(os.path.join(imgDir, os.path.normpath(r"textures/albedo.jpg")))
     base_tex.image = earth_img
     #bump texture
-    bump_img = bpy.data.images.load(os.path.join(".", os.path.normpath(r"../textures/bump.jpg")))
+    bump_img = bpy.data.images.load(os.path.join(imgDir, os.path.normpath(r"textures/bump.jpg")))
     bump_tex.image = bump_img
     #ocean mask image
-    ocean_mask_img = bpy.data.images.load(os.path.join(".", os.path.normpath(r"../textures/ocean_mask.png")))
+    ocean_mask_img = bpy.data.images.load(os.path.join(imgDir, os.path.normpath(r"textures/ocean_mask.png")))
     ocean_mask_tex.image = ocean_mask_img
 
     #changing value of img texture nodes

@@ -93,7 +93,7 @@ if __name__ == "__main__":
 	print(finalTime)
 
 	clean_slate()
-	earth = earth.makeTerrainOcean()
+	earth = earth.makeTerrainOcean(imgDir=dir)
 	earth_atmo = atmosphere.makeAtmosphere(earth)
 	sun = lighting.makeSun(toTrack=earth, datetime=finalTime)
 	clouds = clouds.makeClouds(args.animate)
