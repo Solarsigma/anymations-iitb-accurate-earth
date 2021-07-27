@@ -105,6 +105,6 @@ if __name__ == "__main__":
 	if args.animate:
 		animate.animateCamera()
 	else:
-		animate.makeStillCamera(camLocation=helper.get_cartesian(latitude=args.latitude, longitude=args.longitude, height=animate.getDistance(), scale=RAD_EARTH*SCALE_FAC))
+		animate.makeStillCamera(camLocation=helper.get_cartesian(latitude=args.latitude, longitude=args.longitude, height=earth.dimensions[0], scale=RAD_EARTH*SCALE_FAC), earth=earth)
 	if args.save:
 		bpy.ops.wm.save_as_mainfile(filepath="./realistic_earth.blend")
