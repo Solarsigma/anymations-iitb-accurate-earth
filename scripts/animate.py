@@ -34,13 +34,13 @@ def getDistance():
 
 
 def makeStillCamera(camLocation=(0,0,0), earth=None):
-    bpy.ops.object.camera_add(enter_editmode=False, align='VIEW', location=(0,0,0), rotation=(1.5708,0,0))
+    bpy.ops.object.camera_add(enter_editmode=False, align='VIEW', location=camLocation, rotation=(1.5708,0,0))
     bpy.ops.object.constraint_add(type='TRACK_TO')
     if earth is not None:
         bpy.context.object.constraints["Track To"].target = earth
     else:
         bpy.ops.object.empty_add(type='PLAIN_AXES', align='WORLD', location=(0, 0, 0))
-        bpy.context.object.constraints["Track To"].target = obj["Empty"]
+        bpy.context.object.constraints["Track To"].target = bpy.data.objects["Empty"]
     bpy.context.object.constraints["Track To"].track_axis = 'TRACK_NEGATIVE_Z'
-    bpy.context.object.constraints["Track To"].up_axis = 'UP_Z'
+    bpy.context.object.constraints["Track To"].up_axis = 'UP_Y'
     return bpy.data.objects["Camera"]
