@@ -31,7 +31,7 @@ def makeClouds(animBool, earthRad = 1):
     final_mix.inputs[0].default_value=1
 
     links.new(final_mix.outputs[0],bsdf.inputs[0])
-    links.new(final_mix.outputs[0],bsdf.inputs[18])
+    links.new(final_mix.outputs[0],bsdf.inputs[19])
     puffy_mix=nodes.new(type="ShaderNodeMixRGB")
     puffy_mix.inputs[2].default_value=[0,0,0,1]
     windy_mix=nodes.new(type="ShaderNodeMixRGB")
