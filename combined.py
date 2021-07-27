@@ -83,7 +83,7 @@ if __name__ == "__main__":
 	parser.add_argument("--date", "-d", nargs=1, type=makeDateArr, default=[['2021','07','26']], help="Date to be inputted in the format YYYY-MM-DD", dest="date")
 	parser.add_argument("--save", "-s", action='store_true', default=False, help="If you want the .blend (Blender) file saved or not.", dest="save")
 	parser.add_argument("--animate", "-a", action='store_true', default=False, help="If you want default simple animation", dest="animate")
-	parser.add_argument("--latitude", "-lat", type=float, default=19.0760, help="Enter the latitude in degrees (North is positive. It should be a decimal value)" dest="latitude")
+	parser.add_argument("--latitude", "-lat", type=float, default=19.0760, help="Enter the latitude in degrees (North is positive. It should be a decimal value)", dest="latitude")
 	parser.add_argument("--longitude", "-lon", type=float, default=72.8777, help="Enter the longitude in degrees (East is positive. It should be a decimal value)", dest="longitude")
 	args = parser.parse_args(argv)
 	time = timedelta(hours=int(args.time[0][0]), minutes=int(args.time[0][1]))
