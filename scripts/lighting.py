@@ -15,7 +15,7 @@ def _getSunCoors(time):
     solar_system_ephemeris.set('builtin')
     earthCoorRaw = get_body_barycentric('earth', time)
     sunCoorRaw = get_body_barycentric('sun', time)
-    sunRelCoor = (sunCoorRaw - earthCoorRaw).get_xyz().to(u.m).value/(SCALED_DIST_ES)
+    sunRelCoor = (sunCoorRaw - earthCoorRaw).get_xyz().to(u.m).value/(SCALED_DIST_ES*1000)
     return sunRelCoor
 
 
