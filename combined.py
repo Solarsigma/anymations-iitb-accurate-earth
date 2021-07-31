@@ -10,6 +10,7 @@ SCALED_DIST_ES = DIST_ES/(RAD_EARTH*SCALE_FAC)
 
 ## Init script
 import os
+import numpy as np
 from datetime import timedelta, datetime
 import sys
 import argparse
@@ -79,12 +80,14 @@ if __name__ == "__main__":
 	)
 
 	parser = argparse.ArgumentParser(description=usage_text)
-	parser.add_argument("--time", "-t", nargs=1, type=makeTimeArr, default=[['00','00']], help="Time to be inputted in the format 'HH:MM'", dest="time")
-	parser.add_argument("--date", "-d", nargs=1, type=makeDateArr, default=[['2021','07','26']], help="Date to be inputted in the format YYYY-MM-DD", dest="date")
-	parser.add_argument("--save", "-s", action='store_true', default=False, help="If you want the .blend (Blender) file saved or not.", dest="save")
-	parser.add_argument("--animate", "-a", action='store_true', default=False, help="If you want default simple animation", dest="animate")
-	parser.add_argument("--latitude", "-lat", type=float, default=19.0760, help="Enter the latitude in degrees (North is positive. It should be a decimal value)", dest="latitude")
-	parser.add_argument("--longitude", "-lon", type=float, default=72.8777, help="Enter the longitude in degrees (East is positive. It should be a decimal value)", dest="longitude")
+	parser.add_argument("--time", "-t", nargs=1, type=makeTimeArr, default=[[str(datetime.now().hour), str(datetime.now().minute)]], help="Time to be inputted in the format 'HH:MM'", dest="time")
+	parser.add_argument("--date", "-d", nargs=1, type=makeDateArr, default=[[str(datetime.now().year), str(datetime.now().month), str(datetime.now().day)]], help="Date to be inputted in the format YYYY-MM-DD", dest="date")
+	parser.add_argument("--save", "-s", action='store_true', default=False, help="Use this flag if you want the .blend (Blender) file saved or not.", dest="save")
+	parser.add_argument("--animate", "-a", action='store_true', default=False, help="Use this flag if you want default simple animation.", dest="animate")
+	parser.add_argument("--latitude", "-lat", type=float, default=19.0760, help="Enter the latitude of starting scene in degrees (North is positive. It should be a decimal value)", dest="latitude")
+	parser.add_argument("--longitude", "-lon", type=float, default=72.8777, help="Enter the longitude of starting scene in degrees (East is positive. It should be a decimal value)", dest="longitude")
+	parser.add_argument("--render-img", "-ri", action='store_true', default=False, help="Use this flag if you want to render the image.\nIf both --render-anim and --render-image are passed only --render-anim is considered.", dest="renderImg")
+	parser.add_argument("--render-anim", "-ra", action='store_true', default=False, help="Use this flag if you want to render the default animation in the background.\nNote: --render-anim works only if --animate (-a) is passed.\nNote: If both --render-anim and --render-image are passed only --render-anim is considered.", dest="renderAnim")
 	args = parser.parse_args(argv)
 	time = timedelta(hours=int(args.time[0][0]), minutes=int(args.time[0][1]))
 	date = datetime(year=int(args.date[0][0]), month=int(args.date[0][1]), day=int(args.date[0][2]))
@@ -101,10 +104,26 @@ if __name__ == "__main__":
 	bpy.data.worlds["World"].node_tree.nodes["Background"].inputs[0].default_value = (0, 0, 0, 1)
 	for layer in bpy.context.scene.view_layers:
 		layer.cycles.use_denoising = True
-	# bpy.context.scene.use_denoising = True
 	if args.animate:
-		animate.animateCamera()
+		animate.animateCamera(longitude=args.longitude, height=(earth.dimensions[0]*3/2*np.sin(np.deg2rad(args.latitude))))
 	else:
 		animate.makeStillCamera(camLocation=helper.get_cartesian(latitude=args.latitude, longitude=args.longitude, height=earth.dimensions[0], scale=RAD_EARTH*SCALE_FAC), earth=earth)
 	if args.save:
 		bpy.ops.wm.save_as_mainfile(filepath="./realistic_earth.blend")
+
+	if args.renderImg:
+		bpy.context.scene.frame_set(1)
+		bpy.context.scene.render.image_settings.file_format='JPEG'
+		bpy.context.scene.render.filepath = bpy.path.relpath(os.path.join(dir, "Realistic_Earth_Img"))
+		bpy.ops.render.render(use_viewport=True, write_still=True)
+
+	if args.renderAnim and args.animate:
+		try:
+			os.mkdir("frames")
+		except FileExistsError:
+			print("Folder 'frames' already exists")
+		bpy.context.scene.render.image_settings.file_format = "PNG"
+		bpy.context.scene.render.filepath = bpy.path.relpath(os.path.join(dir, "frames", "Realistic_Earth_Anim"))
+		bpy.ops.render.render(animation=True, write_still=1)
+
+
